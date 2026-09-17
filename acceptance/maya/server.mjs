@@ -74,7 +74,12 @@ export function createServer() {
         sendJson(response, 400, { error: 'n must be a finite number' });
         return;
       }
-      sendJson(response, 200, { value: value * 2 });
+      const doubledValue = value * 2;
+      if (!Number.isFinite(doubledValue)) {
+        sendJson(response, 400, { error: 'doubled value must be finite' });
+        return;
+      }
+      sendJson(response, 200, { value: doubledValue });
       return;
     }
 

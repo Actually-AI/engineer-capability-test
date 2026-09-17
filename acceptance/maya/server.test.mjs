@@ -38,6 +38,12 @@ test('doubles a finite number', async () => {
   assert.deepEqual(await response.json(), { value: 6 });
 });
 
+test('rejects a finite input whose doubled value overflows', async () => {
+  const response = await fetch(baseUrl + '/double?n=1e308');
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { error: 'doubled value must be finite' });
+});
+
 for (const query of ['', '?n=', '?n=hello', '?n=Infinity', '?n=NaN']) {
   test(`rejects invalid input ${query || '(missing)'}`, async () => {
     const response = await fetch(baseUrl + '/double' + query);
